@@ -2,6 +2,7 @@
 // Headers
 require_once '../src/loader.php';
 // header('Content-Type: text/plain');
+
 use repository as R;
 use repository\models as M;
 
@@ -19,5 +20,5 @@ $apartment = new M\Apartment($name, $owner, $resident, $building_instanceId);
 
 echo "Push Single Apartment Object $lb";
 $repository = new R\Repository();
-$repository->PushSingle($apartment);
-echo "PushSingle was successful $lb";
+// $repository->PushSingle($apartment);
+$repository->Push($apartment->SerializeToDatastoreObject());

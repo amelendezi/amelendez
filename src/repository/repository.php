@@ -22,7 +22,7 @@ class Repository {
     public function PushSingle(Apartment $apartment) {
         try {
             // Connect
-            $connection = new \PDO($this->connection, $this->username, $this->password, $this->dbparams);
+            $connection = $this->Connect();
 
             // Build Statement
             $statement = "INSERT INTO apartment (instanceId, name, owner, resident, building_instanceId) VALUES(:instanceId, :name, :owner, :resident, :building_instanceId)";
@@ -42,14 +42,37 @@ class Repository {
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
-    }
-
-    public function Pull() {
+    }           
+    
+    public function Push(DatastoreObject $do)
+    {
+        // Connect
+        $connect = $this->Connect();
         
+        // Build Statement
+        $this->BuildInsertStatement($do);
     }
-
+    
+    private function BuildInsertStatement(DatastoreObject $do)
+    {
+        $statement = "INSERT INTO " . $do->tableName . "(";
+        $params = $do->params;
+        
+        for ($i = 0; $i < count($params) - 1; $i++) {
+            
+            $statement .= $params[i] . ",";
+        }
+        $statement .= $params[i+1] . ") VALUES(";
+        
+        for ($i = 0; $i < count($params) - 1; $i++) {
+            
+            $statement .= ":" . $params[i] . ",";
+        }
+        $statement .= $params[i+1] . ")";
+        return $statement;
+    }
+    
     private function Connect() {
-        
+        return new \PDO($this->connection, $this->username, $this->password, $this->dbparams);
     }
-
 }

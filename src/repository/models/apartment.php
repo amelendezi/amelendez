@@ -3,7 +3,7 @@
 namespace repository\models;
 /**
  * Description of apartment
- * @author Melcas
+ * @author amelendezi
  */
 class Apartment {
     
@@ -21,4 +21,16 @@ class Apartment {
         $this->resident = $resident;
         $this->building_instanceId = $building_instanceId;     
     }
+    
+    function SerializeToDatastoreObject()
+    {
+        // Somethign wrong here with DatastoreObject loading.
+        $do = new DatastoreObject('apartment');        
+        $do->AddParameter('instanceId');
+        $do->AddParameter('name');
+        $do->AddParameter('owner');
+        $do->AddParameter('resident');
+        $do->AddParameter('building_instanceId');        
+        return $do;
+    }              
 }
