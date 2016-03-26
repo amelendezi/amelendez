@@ -1,18 +1,20 @@
 <?php
 
 namespace repository\models;
+
+use repository\Storable as Storable;
+
 /**
  * Description of apartment
  * @author amelendezi
  */
-class Apartment {
+class Apartment extends Storable{
     
-    var $id;
-    var $instanceId;
-    var $name;
-    var $owner;
-    var $resident;
-    var $building_instanceId;
+    public $instanceId;
+    public $name;
+    public $owner;
+    public $resident;
+    public $building_instanceId;
     
     function __construct($name, $owner, $resident, $building_instanceId) {
         $this->instanceId = uniqid();
@@ -20,17 +22,5 @@ class Apartment {
         $this->owner = $owner;
         $this->resident = $resident;
         $this->building_instanceId = $building_instanceId;     
-    }
-    
-    function SerializeToDatastoreObject()
-    {
-        // Somethign wrong here with DatastoreObject loading.
-        $do = new DatastoreObject('apartment');        
-        $do->AddParameter('instanceId');
-        $do->AddParameter('name');
-        $do->AddParameter('owner');
-        $do->AddParameter('resident');
-        $do->AddParameter('building_instanceId');        
-        return $do;
-    }              
+    }            
 }
