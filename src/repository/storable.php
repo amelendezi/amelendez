@@ -8,5 +8,6 @@ namespace repository;
  * @author amelendezi
  */
 abstract class Storable {
-    var $id;
+    public $id;
+    public $instanceId;
 }

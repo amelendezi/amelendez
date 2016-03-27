@@ -32,4 +32,14 @@ class RepositoryHelper {
         // Glue it and return
         return $action . $tableName . $columnNames . $columnBindings;
     }
+    
+    public function GetSelectStatementByInstanceId($storable)
+    {   
+        // Table Name
+        $storableReflection = new \ReflectionClass($storable);
+        $tableName = $storableReflection->getShortName();
+        
+        // Glue it and return
+        return "SELECT name FROM " . $tableName . " WHERE instanceId = :instanceId";
+    }
 }

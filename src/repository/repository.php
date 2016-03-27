@@ -19,7 +19,7 @@ class Repository {
         $this->repositoryHelper = new RepositoryHelper();
     }
 
-    function PushObject(Storable $storable) {
+    function Push(Storable $storable) {
         try {
             // Connect
             $connection = $this->Connect();
@@ -39,6 +39,28 @@ class Repository {
 
             // Execute
             $preparedStatement->execute();
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    
+    function Pull(Storable $storable)
+    {
+        try{
+            // Connect
+            $connection = $this->Connect();
+            
+            // Statement
+            $preparedStatement = $connection->prepare($this->repositoryHelper->GetSelectStatementByInstanceId($storable));
+            
+            // Bind the instanceId
+            $preparedStatement->bindParam(":instanceId", $storable->instanceId);
+            
+            echo "\r\nInstanceId: " . $storable->instanceId;
+            
+            // Execute and return
+            return $preparedStatement->execute();
+            
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }

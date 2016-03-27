@@ -10,7 +10,6 @@ use repository\Storable as Storable;
  */
 class Apartment extends Storable{
     
-    public $instanceId;
     public $name;
     public $owner;
     public $resident;
