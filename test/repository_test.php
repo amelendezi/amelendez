@@ -16,5 +16,7 @@ $apartment = new M\Apartment($name, $owner, $resident, $building_instanceId);
 echo "Execute \r\n";
 $repository = new R\Repository();
 
+$repository->ClearTable("Apartment");
+
 $repository->PushObject($apartment);
 echo "Test Completed \r\n";

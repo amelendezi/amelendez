@@ -2,8 +2,6 @@
 
 namespace repository;
 
-use repository\models\Apartment as Apartment;
-
 /**
  * Description of repository
  *
@@ -45,9 +43,22 @@ class Repository {
             echo "Error: " . $e->getMessage();
         }
     }
+    
+    function ClearTable($tableName)
+    {
+        try {
+            // Connect
+            $connection = $this->Connect();
+            
+            // Execute
+            $connection->exec("TRUNCATE TABLE " . $tableName);
+            
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     private function Connect() {
         return new \PDO($this->connection, $this->username, $this->password, $this->dbparams);
     }
-
 }

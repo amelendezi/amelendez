@@ -32,5 +32,4 @@ class RepositoryHelper {
         // Glue it and return
         return $action . $tableName . $columnNames . $columnBindings;
     }
-
 }
