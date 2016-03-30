@@ -19,7 +19,11 @@ class Repository {
         $this->repositoryHelper = new RepositoryHelper();
     }
 
-    function Push(Storable $storable) {
+    /**
+     * Pushes storable object
+     * @param \repository\Storable $storable
+     */
+    public function Push(Storable $storable) {
         try {
             // Connect
             $connection = $this->Connect();
@@ -44,23 +48,31 @@ class Repository {
         }
     }
     
-    function Pull(Storable $storable)
+    /**
+     * Pulls object given its instance id.
+     * @param type $instanceId
+     * @param type $storableType
+     * @return stdClass
+     */
+    public function PullByInstanceId($instanceId, $storableType)
     {
         try{
             // Connect
             $connection = $this->Connect();
             
-            // Statement
-            $preparedStatement = $connection->prepare($this->repositoryHelper->GetSelectStatementByInstanceId($storable));
+            // Select statement literal
+            $sql = "SELECT * FROM $storableType WHERE instanceId = :instanceId";
             
-            // Bind the instanceId
-            $preparedStatement->bindParam(":instanceId", $storable->instanceId);
+            // Prepare statement
+            $preparedStatement = $connection->prepare($sql);
+            $preparedStatement->bindParam(":instanceId", $instanceId);
             
-            echo "\r\nInstanceId: " . $storable->instanceId;
+            // Execute & Fetch
+            $preparedStatement->execute();
+            $result = $preparedStatement->fetchObject();
             
-            // Execute and return
-            return $preparedStatement->execute();
-            
+            // Return
+            return $result;
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }

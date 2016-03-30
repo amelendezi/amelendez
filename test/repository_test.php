@@ -3,20 +3,29 @@
 require_once '../src/loader.php';
 header('Content-type: text/plain');
 
-use repository as R;
-use repository\models as M;
+use repository\Repository as Repository;
+use repository\StorableType as StorableType;
+use repository\models\Apartment as Apartment;
 
 echo "Prepare \r\n";
 $name = "Apt. 101";
 $owner = "Mickey Mouse";
 $resident = "Donald Duck";
 $building_instanceId = "0000-0000-0000";
-$apartment = new M\Apartment($name, $owner, $resident, $building_instanceId);
+$apartment = new Apartment($name, $owner, $resident, $building_instanceId);
 
-echo "Execute \r\n";
-$repository = new R\Repository();
+$repository = new Repository();
 
+echo "Execute Clear \r\n";
 $repository->ClearTable("Apartment");
 
-$repository->PushObject($apartment);
-echo "Test Completed \r\n";
+echo "Execute Push \r\n";
+$repository->Push($apartment);
+
+echo "Execute Pull \r\n";
+$result = $repository->PullByInstanceId($apartment->instanceId, StorableType::Apartment);
+
+echo "Result \r\n";
+print_r($result);
+
+echo "\r\nTest Completed \r\n";
