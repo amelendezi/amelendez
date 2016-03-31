@@ -5,9 +5,6 @@ define('APPLICATION_PATH', realpath('.'));
 // Define the application paths to load
 $paths = array(
   APPLICATION_PATH,
-  APPLICATION_PATH . '/src',  
-  APPLICATION_PATH . '/src/repository',
-  APPLICATION_PATH . '/src/repository/models',  
   get_include_path()
 );
 
