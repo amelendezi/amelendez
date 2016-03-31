@@ -1,6 +1,6 @@
 <?php
 
-namespace repository;
+namespace src\repository;
 
 /**
  * Description of repository
@@ -23,7 +23,7 @@ class Repository {
      * Pushes storable object
      * @param \repository\Storable $storable
      */
-    public function Push(Storable $storable) {
+    public function Store(Storable $storable) {
         try {
             // Connect
             $connection = $this->Connect();
@@ -54,7 +54,7 @@ class Repository {
      * @param type $storableType
      * @return stdClass
      */
-    public function PullByInstanceId($instanceId, $storableType)
+    public function Get($instanceId, $storableType)
     {
         try{
             // Connect
@@ -76,21 +76,7 @@ class Repository {
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
-    }
-    
-    function ClearTable($tableName)
-    {
-        try {
-            // Connect
-            $connection = $this->Connect();
-            
-            // Execute
-            $connection->exec("TRUNCATE TABLE " . $tableName);
-            
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
+    }    
 
     private function Connect() {
         return new \PDO($this->connection, $this->username, $this->password, $this->dbparams);

@@ -1,6 +1,6 @@
 <?php
 
-namespace repository;
+namespace src\repository;
 
 /**
  * Description of storable

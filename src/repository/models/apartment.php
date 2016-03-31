@@ -1,8 +1,8 @@
 <?php
 
-namespace repository\models;
+namespace src\repository\models;
 
-use repository\Storable as Storable;
+use src\repository\Storable as Storable;
 
 /**
  * Description of apartment

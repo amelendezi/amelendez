@@ -1,2 +1,2 @@
 <?php
-header('Location: test/repository_test.php');
+header('Location: bootstrapTests.php');
