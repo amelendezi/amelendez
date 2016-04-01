@@ -21,7 +21,6 @@ class GenericTest {
     }
 
     public function AssertStorableWithResult($storable, $result) {
-        $assert = true;
         $storableArray = (array) $storable;
         $resultArray = (array) $result;
         foreach ($storableArray as $key => $value) {

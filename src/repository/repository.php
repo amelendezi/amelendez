@@ -47,38 +47,57 @@ class Repository {
             echo "Error: " . $e->getMessage();
         }
     }
-    
+
     /**
      * Pulls object given its instance id.
      * @param type $instanceId
      * @param type $storableType
      * @return stdClass
      */
-    public function Get($instanceId, $storableType)
-    {
-        try{
+    public function Get($instanceId, $storableType) {
+        try {
             // Connect
             $connection = $this->Connect();
-            
+
             // Select statement literal
             $sql = "SELECT * FROM $storableType WHERE instanceId = :instanceId";
-            
+
             // Prepare statement
             $preparedStatement = $connection->prepare($sql);
             $preparedStatement->bindParam(":instanceId", $instanceId);
-            
+
             // Execute & Fetch
             $preparedStatement->execute();
             $result = $preparedStatement->fetchObject();
-            
+
             // Return
             return $result;
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
-    }    
+    }
+
+    public function Remove($instanceId, $storableType) {
+        try {
+            // Connect
+            $connection = $this->Connect();
+
+            // Delete statemenet literal
+            $sql = "DELETE FROM $storableType WHERE instanceId = :instanceId";
+
+            // Prepare statement
+            $preparedStatement = $connection->prepare($sql);
+            $preparedStatement->bindParam(":instanceId", $instanceId);
+
+            // Execute & Fetch
+            $preparedStatement->execute();
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     private function Connect() {
         return new \PDO($this->connection, $this->username, $this->password, $this->dbparams);
     }
+
 }

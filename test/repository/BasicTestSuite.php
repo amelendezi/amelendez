@@ -28,7 +28,12 @@ class BasicTestSuite extends GenericTest {
         $result = $this->repository->Get($apartment->instanceId, StorableType::Apartment);
         
         // Temp printing of result
-        return $this->AssertStorableWithResult($apartment, $result);      
+        $message = $this->AssertStorableWithResult($apartment, $result);
+        
+        // Delete
+        $this->repository->Remove($result->instanceId, StorableType::Apartment);
+        
+        return $message;
     }
 
 }
