@@ -13,24 +13,12 @@ use src\repository\RepositoryAdmin as RepositoryAdmin;
 class GenericTest {
 
     public $repository;
-    public $repositoryAdmin; 
+    public $repositoryAdmin;
+    public $assert;
 
     public function __construct() {
         $this->repository = new Repository();
         $this->repositoryAdmin = new RepositoryAdmin();
-    }
-
-    public function AssertStorableWithResult($storable, $result) {
-        $storableArray = (array) $storable;
-        $resultArray = (array) $result;
-        foreach ($storableArray as $key => $value) {
-            if ($key != "id") {
-                if($value != $resultArray[$key])
-                {
-                    return "FAIL: AssertStorableWithResult finds that $value is different than $resultArray[$key]\r\n";
-                }                
-            }
-        }
-        return "AssertStorableWithResult Success\r\n";
-    }
+        $this->assert = new Assert();
+    }    
 }

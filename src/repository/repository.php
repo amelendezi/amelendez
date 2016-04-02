@@ -77,6 +77,11 @@ class Repository {
         }
     }
 
+    /**
+     * Removes object given its instance id.
+     * @param type $instanceId
+     * @param type $storableType
+     */
     public function Remove($instanceId, $storableType) {
         try {
             // Connect
@@ -99,5 +104,4 @@ class Repository {
     private function Connect() {
         return new \PDO($this->connection, $this->username, $this->password, $this->dbparams);
     }
-
 }
