@@ -4,7 +4,7 @@ namespace src\repository;
 
 /**
  * Description of repositoryHelper
-
+ *
  * @author amelendezi
  */
 class RepositoryHelper {
@@ -13,11 +13,10 @@ class RepositoryHelper {
         // Insert Action
         $action = "INSERT INTO ";
 
-        // Table Name       
-        $storableReflection = new \ReflectionClass($storable);
-        $tableName = $storableReflection->getShortName();
+        // Table Name               
+        $tableName = $this->GetTableName($storable);
 
-        // Keys & Values
+        // Keys & Bindings
         $objectKeys = array();
         $i = 0;
         foreach ($storable as $key => $value) {
@@ -31,20 +30,36 @@ class RepositoryHelper {
 
         // Glue it and return
         return $action . $tableName . $columnNames . $columnBindings;
-    }
-
-    public function GetSelectStatementByInstanceId($storable) {
+    }     
+    
+    public function GetUpdateStatement($storable) {
+        // Update Action
+        $action = "UPDATE ";
+        
         // Table Name
-        $storableReflection = new \ReflectionClass($storable);
-        $tableName = $storableReflection->getShortName();
-
+        $tableName = $this->GetTableName($storable) . " ";
+        
+        // Keys & Bindings
+        $objectKeysAndBindings = array();
+        $i = 0;
+        foreach ($storable as $key => $value) {
+            if ($key != "id" && $key != "instanceId") { // excludes id
+                $objectKeysAndBindings[$i] = "$key = :" . $key;
+            }
+            $i++;
+        }
+        $columnsAndBindings = "SET " . implode(", ", $objectKeysAndBindings) . " ";
+        
+        // Where
+        $where = "WHERE instanceId = :instanceId";
+        
         // Glue it and return
-        return "SELECT name FROM " . $tableName . " WHERE instanceId = :instanceId";
+        return $action . $tableName . $columnsAndBindings . $where;
     }
-
-    public function MapToObject($instance, $className) {
-        return unserialize(sprintf(
-                        'O:%d:"%s"%s', strlen($className), $className, strstr(strstr(serialize($instance), '"'), ':')
-        ));
+    
+    private function GetTableName($storable)
+    {       
+        $storableReflection = new \ReflectionClass($storable);
+        return $storableReflection->getShortName();
     }
 }

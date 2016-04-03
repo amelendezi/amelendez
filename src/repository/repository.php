@@ -35,11 +35,7 @@ class Repository {
             $preparedStatement = $connection->prepare($insertStatement);
 
             // Bind the columns to object values
-            foreach ($storable as $key => $value) {
-                if ($key != "id") {
-                    $preparedStatement->bindParam(":" . $key, $storable->$key);
-                }
-            }
+            $this->BindPreparedStatementParameters($storable, $preparedStatement);
 
             // Execute
             $preparedStatement->execute();
@@ -88,10 +84,10 @@ class Repository {
             $connection = $this->Connect();
 
             // Delete statemenet literal
-            $sql = "DELETE FROM $storableType WHERE instanceId = :instanceId";
+            $deleteStatement = "DELETE FROM $storableType WHERE instanceId = :instanceId";
 
             // Prepare statement
-            $preparedStatement = $connection->prepare($sql);
+            $preparedStatement = $connection->prepare($deleteStatement);
             $preparedStatement->bindParam(":instanceId", $instanceId);
 
             // Execute & Fetch
@@ -101,7 +97,42 @@ class Repository {
         }
     }
 
+    /**
+     * Updates object given the storable (changed). Does not update
+     * instanceId nor id.
+     * @param type $storable
+     */
+    public function Update($storable) {
+        try {
+            // Connect
+            $connection = $this->Connect();
+
+            // Update statement literal
+            $updateStatement = $this->repositoryHelper->GetUpdateStatement($storable);
+
+            // Prepare statement
+            $preparedStatement = $connection->prepare($updateStatement);
+
+            // Bind the columns to object values
+            $this->BindPreparedStatementParameters($storable, $preparedStatement);
+
+            // Execute
+            $preparedStatement->execute();
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
     private function Connect() {
         return new \PDO($this->connection, $this->username, $this->password, $this->dbparams);
     }
+
+    private function BindPreparedStatementParameters($storable, $preparedStatement) {
+        foreach ($storable as $key => $value) {
+            if ($key != "id") {
+                $preparedStatement->bindParam(":" . $key, $storable->$key);
+            }
+        }
+    }
+
 }
