@@ -4,6 +4,7 @@ namespace test\repository;
 
 use test\GenericTest as GenericTest;
 use src\repository\StorableType as StorableType;
+use src\repository\Where as Where;
 use src\repository\models\Apartment as Apartment;
 
 /**
@@ -22,10 +23,10 @@ class BasicTestSuite extends GenericTest {
         $this->repositoryAdmin->ClearTable(StorableType::Apartment);
 
         // Store Object
-        $this->repository->Store($apartment);
-
+        $this->repository->Store($apartment);               
+        
         // Get Object
-        $result = $this->repository->Get($apartment->instanceId, StorableType::Apartment);
+        $result = $this->repository->GetSingle(StorableType::Apartment, $this->GetApartmentWhere($apartment));
 
         // Temp printing of result
         return $this->assert->AreEqual($apartment, $result);
@@ -46,7 +47,7 @@ class BasicTestSuite extends GenericTest {
         $this->repository->Remove($apartment->instanceId, StorableType::Apartment);
 
         // Get Object
-        $result = $this->repository->Get($apartment->instanceId, StorableType::Apartment);
+        $result = $this->repository->GetSingle(StorableType::Apartment, $this->GetApartmentWhere($apartment));
         
         return $this->assert->IsNull($result);
     }
@@ -68,9 +69,21 @@ class BasicTestSuite extends GenericTest {
         $this->repository->Update($apartment);
         
         // Get Object
-        $result = $this->repository->Get($apartment->instanceId, StorableType::Apartment);
+        $result = $this->repository->GetSingle(StorableType::Apartment, $this->GetApartmentWhere($apartment));
         
         // Assert
         return $this->assert->AreEqual($result, $apartment);
+    }
+    
+    /**
+     * Builds instanceId where clause
+     * @return Where
+     */
+    private function GetApartmentWhere($apartment)
+    {
+        // Build Where
+        $where = new Where();
+        $where->Equals("instanceId", $apartment->instanceId);
+        return $where;
     }
 }
