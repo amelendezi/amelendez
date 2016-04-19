@@ -76,6 +76,37 @@ class Repository {
             echo "Error: " . $e->getMessage();
         }
     }       
+    
+    /**
+     * Gets multiple objects given where condition
+     * @param type $storableType
+     * @param Where $where
+     * @return stdClass[]
+     */
+    public function GetMultiple($storableType, Where $where) {
+        try {
+            // Connect
+            $connection = $this->Connect();
+
+            // Select statement literal
+            $sql = "SELECT * FROM $storableType WHERE " . $where->GetStatement();
+
+            // Prepare statement
+            $preparedStatement = $connection->prepare($sql);
+            
+            // Bind where params to prepared statement
+            $where->Bind($preparedStatement);
+
+            // Execute & Fetch
+            $preparedStatement->execute();            
+            $result = $preparedStatement->fetchAll(\PDO::FETCH_OBJ);
+
+            // Return
+            return $result;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     /**
      * Removes object given its instance id.
